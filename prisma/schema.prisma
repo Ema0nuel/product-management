@@ -1,0 +1,124 @@
+// Product Expiry Alert Management System
+// Relational schema per DESIGN_ARCHITECTURE_GUIDE section 6 and thesis 3.6.
+// Five core entities: users, categories, products, batches, actions.
+// AppSettings is the single key-value configuration record for the two
+// alert thresholds (guide 6.7), not a sixth core entity.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  system_admin
+  inventory_officer
+  manager
+}
+
+enum AlertLevel {
+  ACTIVE
+  WARNING
+  CRITICAL
+  EXPIRED
+}
+
+enum Disposition {
+  REMOVED
+  RETURNED
+  SOLD
+  DISCOUNTED
+  DISPOSED
+}
+
+// Shelf state of a product, not its alert level. IN_STOCK and ON_SALE
+// move both ways; DISPOSED is terminal, which keeps a product from
+// quietly returning to the shelf after it has been struck off.
+enum ProductStatus {
+  IN_STOCK
+  ON_SALE
+  DISPOSED
+}
+
+model User {
+  user_id           Int       @id @default(autoincrement())
+  username          String    @unique
+  password_hash     String
+  role              Role
+  created_at        DateTime  @default(now())
+  actions           Action[]
+  disposed_products Product[]
+
+  @@map("users")
+}
+
+model Category {
+  category_id Int      @id @default(autoincrement())
+  name        String   @unique
+  products    Product[]
+
+  @@map("categories")
+}
+
+model Product {
+  product_id         Int           @id @default(autoincrement())
+  name               String
+  description        String?
+  category           Category      @relation(fields: [category_id], references: [category_id])
+  category_id        Int
+  manufacturing_date DateTime?     @db.Date
+  // Nullable only so rows written before this field existed still load.
+  // The API requires it on create, so every product filed from the sheet
+  // carries an expiry date, and the comparison system has a date to read.
+  expiry_date        DateTime?     @db.Date
+  storage_location   String?
+  status             ProductStatus @default(IN_STOCK)
+  disposed_at        DateTime?     @db.Date
+  disposed_by        Int?
+  disposed_by_user   User?         @relation(fields: [disposed_by], references: [user_id], onDelete: SetNull)
+  batches            Batch[]
+
+  @@index([expiry_date])
+  @@map("products")
+}
+
+model Batch {
+  batch_id           Int        @id @default(autoincrement())
+  product            Product    @relation(fields: [product_id], references: [product_id])
+  product_id         Int
+  batch_number       String
+  quantity           Int
+  manufacturing_date DateTime   @db.Date
+  expiry_date        DateTime   @db.Date
+  storage_location   String
+  alert_level        AlertLevel @default(ACTIVE)
+  actions            Action[]
+
+  @@map("batches")
+}
+
+model Action {
+  action_id   Int         @id @default(autoincrement())
+  batch       Batch       @relation(fields: [batch_id], references: [batch_id])
+  batch_id    Int
+  user        User        @relation(fields: [user_id], references: [user_id])
+  user_id     Int
+  disposition Disposition
+  remark      String?
+  created_at  DateTime    @default(now())
+
+  @@map("actions")
+}
+
+// Single key-value row for alert thresholds, configurable by system_admin.
+// id pinned to 1; defaults match Table 3.1 (guide 6.7).
+model AppSettings {
+  id           Int @id @default(1)
+  warning_max  Int @default(30)
+  critical_max Int @default(7)
+
+  @@map("app_settings")
+}

@@ -1,0 +1,144 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+  --color-level-active: var(--level-active);
+  --color-level-warning: var(--level-warning);
+  --color-level-critical: var(--level-critical);
+  --color-level-expired: var(--level-expired);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Goods-Inward Ledger ink set (DESIGN.md). Warm paper ground, ledger ink
+   text, hairline rules. Level inks mark alert levels only. */
+:root {
+  --background: #f4f1ea;
+  --foreground: #21241f;
+  --card: #f4f1ea;
+  --card-foreground: #21241f;
+  --popover: #f4f1ea;
+  --popover-foreground: #21241f;
+  --primary: #21241f;
+  --primary-foreground: #f4f1ea;
+  --secondary: #e8e4d8;
+  --secondary-foreground: #21241f;
+  --muted: #e8e4d8;
+  --muted-foreground: #6b7264;
+  --accent: #e8e4d8;
+  --accent-foreground: #21241f;
+  --destructive: #a0352a;
+  --border: #d6d0c3;
+  --input: #d6d0c3;
+  --ring: #6b7264;
+  --chart-1: #a0352a;
+  --chart-2: #c8791f;
+  --chart-3: #e0b03e;
+  --chart-4: #6b7264;
+  --chart-5: #21241f;
+  --radius: 0rem;
+  --level-active: #6b7264;
+  --level-warning: #e0b03e;
+  --level-critical: #c8791f;
+  --level-expired: #a0352a;
+  --sidebar: #eee9dd;
+  --sidebar-foreground: #21241f;
+  --sidebar-primary: #21241f;
+  --sidebar-primary-foreground: #f4f1ea;
+  --sidebar-accent: #e8e4d8;
+  --sidebar-accent-foreground: #21241f;
+  --sidebar-border: #d6d0c3;
+  --sidebar-ring: #6b7264;
+}
+
+/* Dark variant: the ledger at night, same ink set on dark paper. */
+.dark {
+  --background: #1d201c;
+  --foreground: #f4f1ea;
+  --card: #23261f;
+  --card-foreground: #f4f1ea;
+  --popover: #23261f;
+  --popover-foreground: #f4f1ea;
+  --primary: #f4f1ea;
+  --primary-foreground: #21241f;
+  --secondary: #31342c;
+  --secondary-foreground: #f4f1ea;
+  --muted: #31342c;
+  --muted-foreground: #a8ae9d;
+  --accent: #31342c;
+  --accent-foreground: #f4f1ea;
+  --destructive: #c05043;
+  --border: #3a3d33;
+  --input: #3a3d33;
+  --ring: #a8ae9d;
+  --chart-1: #c05043;
+  --chart-2: #d8933a;
+  --chart-3: #e0b03e;
+  --chart-4: #a8ae9d;
+  --chart-5: #f4f1ea;
+  --level-active: #a8ae9d;
+  --level-warning: #e0b03e;
+  --level-critical: #d8933a;
+  --level-expired: #c05043;
+  --sidebar: #1d201c;
+  --sidebar-foreground: #f4f1ea;
+  --sidebar-primary: #f4f1ea;
+  --sidebar-primary-foreground: #1d201c;
+  --sidebar-accent: #31342c;
+  --sidebar-accent-foreground: #f4f1ea;
+  --sidebar-border: #3a3d33;
+  --sidebar-ring: #a8ae9d;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
