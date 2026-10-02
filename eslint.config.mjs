@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Plain Node scripts run by `node x.cjs`, not part of the app graph.
+    "**/*.cjs",
+    "lib/generated/**",
   ]),
 ]);
 
