@@ -3,7 +3,7 @@
 import type { ComponentType } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, Package, SlidersHorizontal, Tag } from "lucide-react";
+import { ClipboardList, LayoutGrid, Package, SlidersHorizontal, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isNavItemActive, navForRole, type NavIcon } from "@/lib/nav";
 import type { SessionRole } from "@/lib/auth";
@@ -15,11 +15,12 @@ import type { SessionRole } from "@/lib/auth";
 // The Flat-By-Default Rule).
 //
 // The tab set is whatever navForRole() returns for the signed-in role, so a
-// manager sees one tab, an officer sees three and the administrator sees
-// four, with no second list to keep in step.
+// manager sees two tabs, an officer sees four and the administrator sees
+// five, with no second list to keep in step.
 
 const ICONS: Record<NavIcon, ComponentType<{ className?: string; strokeWidth?: number }>> = {
   dashboard: LayoutGrid,
+  records: ClipboardList,
   products: Package,
   categories: Tag,
   settings: SlidersHorizontal,

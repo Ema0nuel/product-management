@@ -5,14 +5,20 @@ import type { SessionRole } from "@/lib/auth";
 // destination or a role change lands in one place and never drifts.
 //
 // Visibility follows the RBAC matrix (guide 10, thesis Table 3.2). The
-// dashboard is read by every role. The product and category registers are
+// dashboard and the action records are read by every role; the manager's
+// read-only sheet reaches both. The product and category registers are
 // the inventory officer's daily work. Inventory Settings carries alert
 // thresholds and account management, which only the administrator holds.
 //
 // Icons are named, not imported, so this module stays free of React and can
 // be read by a server component without pulling the icon set into its graph.
 
-export type NavIcon = "dashboard" | "products" | "categories" | "settings";
+export type NavIcon =
+  | "dashboard"
+  | "records"
+  | "products"
+  | "categories"
+  | "settings";
 
 export type NavItem = {
   key: string;
@@ -35,6 +41,15 @@ export const NAV_ITEMS: readonly NavItem[] = [
     short: "Dashboard",
     hint: "Expiry-priority batch ledger",
     icon: "dashboard",
+    roles: ["system_admin", "inventory_officer", "manager"],
+  },
+  {
+    key: "records",
+    href: "/records",
+    label: "Action Records",
+    short: "Records",
+    hint: "Recorded dispositions, read-only",
+    icon: "records",
     roles: ["system_admin", "inventory_officer", "manager"],
   },
   {

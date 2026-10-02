@@ -3,7 +3,7 @@
 import type { ComponentType } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutGrid, Package, SlidersHorizontal, Tag } from "lucide-react";
+import { ClipboardList, LayoutGrid, Package, SlidersHorizontal, Tag } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { isNavItemActive, navForRole, type NavIcon } from "@/lib/nav";
 import type { SessionRole } from "@/lib/auth";
@@ -18,6 +18,7 @@ import type { SessionRole } from "@/lib/auth";
 
 const ICONS: Record<NavIcon, ComponentType<{ className?: string; strokeWidth?: number }>> = {
   dashboard: LayoutGrid,
+  records: ClipboardList,
   products: Package,
   categories: Tag,
   settings: SlidersHorizontal,

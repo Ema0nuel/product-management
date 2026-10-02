@@ -21,6 +21,7 @@ import {
   type ProductSummary,
 } from "@/components/product-form";
 import { ProductActions } from "@/components/product-actions";
+import { NewBatchButton } from "@/components/batch-form";
 
 // One product, in full: how close it is to expiring, what it is, where it
 // sits, which batches are held against it, and the controls that move it
@@ -224,13 +225,24 @@ export default async function ProductDetailPage({
       </section>
 
       <section className="mt-6">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="text-sm font-semibold text-foreground">Batches</h2>
-          <p className="text-xs text-muted-foreground">
-            {product.batches.length === 0
-              ? "No stock lots recorded against this product."
-              : `${product.batches.length} ${product.batches.length === 1 ? "lot" : "lots"}, first expired first out.`}
-          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <p className="text-xs text-muted-foreground">
+              {product.batches.length === 0
+                ? "No stock lots recorded against this product."
+                : `${product.batches.length} ${product.batches.length === 1 ? "lot" : "lots"}, first expired first out.`}
+            </p>
+            {product.status !== "DISPOSED" && (
+              <NewBatchButton
+                product={{
+                  product_id: product.product_id,
+                  name: product.name,
+                  storage_location: product.storage_location,
+                }}
+              />
+            )}
+          </div>
         </div>
 
         <div className="mt-3 overflow-x-auto border border-border bg-card">
@@ -277,7 +289,9 @@ export default async function ProductDetailPage({
               {product.batches.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} className="py-10 text-center text-muted-foreground">
-                    No batches yet. Stock lots are recorded on the ledger against this product.
+                    {product.status === "DISPOSED"
+                      ? "No batches yet. A struck-off product takes no new stock lots."
+                      : "No batches yet. Record the first stock lot with New batch."}
                   </TableCell>
                 </TableRow>
               )}

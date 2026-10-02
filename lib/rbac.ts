@@ -6,6 +6,7 @@ import type { SessionRole } from "@/lib/auth";
 
 export type Permission =
   | "view_dashboard"
+  | "view_action_records"
   | "manage_products"
   | "manage_categories"
   | "manage_batches"
@@ -18,6 +19,7 @@ const MATRIX: Record<SessionRole, readonly Permission[]> = {
   // threshold configuration, and holds no power the workflow does not need.
   system_admin: [
     "view_dashboard",
+    "view_action_records",
     "manage_products",
     "manage_categories",
     "manage_batches",
@@ -28,13 +30,14 @@ const MATRIX: Record<SessionRole, readonly Permission[]> = {
   // The inventory officer does the daily work.
   inventory_officer: [
     "view_dashboard",
+    "view_action_records",
     "manage_products",
     "manage_categories",
     "manage_batches",
     "record_action",
   ],
   // The manager holds a read-only view of the dashboard and action records.
-  manager: ["view_dashboard"],
+  manager: ["view_dashboard", "view_action_records"],
 };
 
 export function can(role: SessionRole | null | undefined, permission: Permission): boolean {

@@ -3,6 +3,7 @@ import { db } from "@/lib/db";
 import { requireUser } from "@/lib/guard";
 import { can } from "@/lib/rbac";
 import { classifyLevel, type Level } from "@/lib/expiry";
+import { runMonitoringPass } from "@/lib/monitoring";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -42,6 +43,11 @@ function dayLabel(days: number): string {
 
 export default async function DashboardPage() {
   const user = await requireUser();
+
+  // The scheduled monitoring pass (guide 9.1): this page re-runs on the
+  // poll interval, so each refresh classifies every batch and stores the
+  // level back on the row. Display below stays computed at read time.
+  await runMonitoringPass();
 
   const settings = await db.appSettings.findUnique({ where: { id: 1 } });
   const warningMax = settings?.warning_max ?? 30;
