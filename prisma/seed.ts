@@ -1,3 +1,7 @@
+// tsx runs outside Next, so .env is not auto-loaded the way next dev loads
+// it. dotenv must come first: the adapter below reads DATABASE_URL at import
+// time, and an empty string would make pg silently fall back to localhost.
+import "dotenv/config";
 import {
   PrismaClient,
   Role,
@@ -9,7 +13,13 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { addDays, differenceInDays } from "date-fns";
 import * as bcrypt from "bcryptjs";
 
-const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL ?? "" });
+if (!process.env.DATABASE_URL) {
+  throw new Error(
+    "DATABASE_URL is not set. Copy .env.example to .env and fill in the Supabase connection string.",
+  );
+}
+
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 const prisma = new PrismaClient({ adapter });
 
 // Default thresholds from Table 3.1 (guide 6.7).
